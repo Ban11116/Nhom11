@@ -1,43 +1,45 @@
-import { de } from "@faker-js/faker";
 import mongoose from "mongoose";
-
-const addressSchema = new mongoose.Schema({
-	city: {
-		type: String,
-		required: true,
-	},
-	district: {
-		type: String,
-		required: true,
-	},
-	detail: {
-		type: String,
-		required: true,
-	},
-	default: {
-		type: Boolean,
-		default: false,
-	},
-});
 
 const userSchema = new mongoose.Schema(
 	{
-		fullname: {
+		user_id: {
+			type: String,
+			required: true,
+			unique: true,
+		},
+		name: {
 			type: String,
 			required: true,
 		},
-		email: {},
-		password: {},
-		phoneNumber: {},
-		address: [
-			{
-				type: addressSchema,
-				required: true,
-			},
-		],
+		email: {
+			type: String,
+			required: true,
+			unique: true,
+			match: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+		},
+		password: {
+			type: String,
+			required: true,
+			minlength: 6,
+		},
+		phone: {
+			type: String,
+			required: true,
+		},
+		address: {
+			type: String,
+			required: true,
+		},
+		role_id: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "Role",
+			required: true,
+		},
 	},
-
-	{ timestamps: true, versionKey: false }
+	{
+		timestamps: true, // Tự động tạo createdAt và updatedAt
+		versionKey: false,
+	}
 );
 
 const User = mongoose.model("User", userSchema);
